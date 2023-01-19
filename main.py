@@ -14,17 +14,9 @@ def temp_tick(var):
     global html
     currentvoltage = tempsensor.read_u16() * conversion_factor
     temp = 27 - ((currentvoltage - 0.706)/0.001721)
-    html = """<!DOCTYPE html>
-<html>
-    <head><meta http-equiv="refresh" content="5">
-    <title> Pico W </title> </head>
-    <body> <h1> The Pico W </h1>
-    <p><h2><a href="/light/on"> Turn the LED on! </a></p>
-    <p><a href="/light/off"> Turn the LED off! </a></h2></p>
-    <p></p>
-    <p> The current temperature of the Pi Pico W is {:.1f} degrees celsius.
-    </body>
-</html>""".format(temp)
+    with open('website.html') as fp:
+        html = str(fp.read())
+    html = html.format(temp)
 
 Timer().init(freq=0.5, mode=Timer.PERIODIC, callback=temp_tick)
 
