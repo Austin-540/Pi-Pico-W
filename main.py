@@ -6,10 +6,6 @@ import socket
 
 led = machine.Pin("LED", machine.Pin.OUT)
 
-for _ in range(5):
-    led.toggle()
-    utime.sleep(0.1)
-    
 secrets_dict = get_secrets()
 wifi_name = secrets_dict["network_name"]
 wifi_password = secrets_dict["network_password"]
@@ -21,7 +17,6 @@ wlan.connect(wifi_name, wifi_password)
 
 max_wait = 10 #seconds
 
-led.on()
 while max_wait > 0:
     if wlan.status() < 0 or wlan.status() >= 3:
         break
@@ -31,20 +26,19 @@ while max_wait > 0:
     
 if wlan.status() !=3:
     print("Connection Failed!")
-    while True:
-        led.toggle()
-        utime.sleep(0.2)
+
 else:
     print("Connected")
     print("IP = " + wlan.ifconfig()[0])
-    led.off()
+    
 
 
 html = """<!DOCTYPE html>
 <html>
     <head> <title> Pico W </title> </head>
     <body> <h1> The Pico W </h1>
-    <p> Hello world! </p>
+    <p><a href="/light/on"> Turn the LED on! </a></p>
+    <p><a href="/light/off"> Turn the LED off! </a></p>
     </body>
 </html>"""
 
@@ -56,16 +50,40 @@ s.bind(addr)
 s.listen(1)
 
 while True:
-    cl, addr = s.accept()
-    cl_file = cl.makefile("rwb", 0)
-    while True:
-        line = cl_file.readline()
-        if not line or line == b'\r\n':
-            break
-    response = html
-    cl.send("HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n")
-    cl.send(response)
-    cl.close()
+    try:
+        cl, addr = s.accept()
+        print("Client connected from ", addr)
+        request = cl.recv(1024)
+        print(request)
+        
+        request = str(request)
+        led_on = request.find("/light/on")
+        led_off = request.find("/light/off")
+        print("led on = " + str(led_on))
+        print("led off = " + str(led_off))
+        
+        if led_on == 6:
+            print("LED on")
+            led.on()
+            stateis = "LED ON"
+        
+        if led_off == 6:
+            print("LED off")
+            led.off()
+            stateis = "LED OFF"
+            
+        try:
+            response = html % stateis
+        except:
+            response = html
+        
+        cl.send('HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n')
+        cl.send(response)
+        cl.close()
+        
+    except OSError as e:
+        cl.close()
+        print("Connection closed")
 
 
 
