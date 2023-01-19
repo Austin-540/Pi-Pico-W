@@ -4,7 +4,33 @@ import network
 from secrets import *
 import socket
 
+from machine import ADC, Timer
+import utime
+
+tempsensor = ADC(4)
+conversion_factor = 3.3 / 65535
+
+def temp_tick(var):
+    global html
+    currentvoltage = tempsensor.read_u16() * conversion_factor
+    temp = 27 - ((currentvoltage - 0.706)/0.001721)
+    html = """<!DOCTYPE html>
+<html>
+    <head><meta http-equiv="refresh" content="5">
+    <title> Pico W </title> </head>
+    <body> <h1> The Pico W </h1>
+    <p><h2><a href="/light/on"> Turn the LED on! </a></p>
+    <p><a href="/light/off"> Turn the LED off! </a></h2></p>
+    <p></p>
+    <p> The current temperature of the Pi Pico W is {:.1f} degrees celsius.
+    </body>
+</html>""".format(temp)
+
+Timer().init(freq=0.5, mode=Timer.PERIODIC, callback=temp_tick)
+
 led = machine.Pin("LED", machine.Pin.OUT)
+
+temp_tick(5)
 
 secrets_dict = get_secrets()
 wifi_name = secrets_dict["network_name"]
@@ -32,15 +58,6 @@ else:
     print("IP = " + wlan.ifconfig()[0])
     
 
-
-html = """<!DOCTYPE html>
-<html>
-    <head> <title> Pico W </title> </head>
-    <body> <h1> The Pico W </h1>
-    <p><a href="/light/on"> Turn the LED on! </a></p>
-    <p><a href="/light/off"> Turn the LED off! </a></p>
-    </body>
-</html>"""
 
 sta_if = network.WLAN(network.STA_IF)
 addr = socket.getaddrinfo("0.0.0.0", 80)[0][-1]
@@ -84,6 +101,5 @@ while True:
     except OSError as e:
         cl.close()
         print("Connection closed")
-
 
 
