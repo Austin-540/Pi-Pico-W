@@ -48,6 +48,9 @@ if wlan.status() !=3:
 else:
     print("Connected")
     print("IP = " + wlan.ifconfig()[0])
+    led.on()
+    utime.sleep(0.3)
+    led.off()
     
 
 
