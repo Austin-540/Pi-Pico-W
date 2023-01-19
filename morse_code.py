@@ -1,4 +1,5 @@
 import machine
+import utime
 led = machine.Pin("LED", machine.Pin.OUT)
 decode = {".-": "A",
           "-...": "B",
@@ -35,7 +36,9 @@ decode = {".-": "A",
           "-....": "6",
           "--...": "7",
           "---..": "8",
-          "----.": "9"}
+          "----.": "9",
+          "/": " "
+          }
 
 
 encode = {v: k for k, v in decode.items()}
@@ -57,3 +60,27 @@ for i in range(len(my_word_list)):
             dots_and_dashes.append(value)
 
 print(dots_and_dashes)
+
+
+def flash_led(morse_code_letter):
+    led.off()
+    for char in morse_code_letter:
+        if char == ".":
+            led.on()
+            utime.sleep(0.2)
+            led.off()
+        if char == "-":
+            led.on()
+            utime.sleep(0.6)
+            led.off()
+        if char == '/':
+            utime.sleep(1)
+        
+        
+        utime.sleep(0.2)
+
+
+
+for i in range(len(dots_and_dashes)):
+    flash_led(dots_and_dashes[i])
+    utime.sleep(0.8)
