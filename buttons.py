@@ -1,12 +1,12 @@
-import machine
-import utime
 from picozero import Button
+from time import sleep
+print("Hello world")
 
-led = machine.Pin(28, machine.Pin.OUT)
 button = Button(12)
 
-button.when_pressed = led.on()
-button.when_released = led.off()
-
 while True:
-    pass
+    if button.is_pressed:
+        print("Button is pressed")
+    else:
+        print("Button is not pressed")
+    sleep(0.1)
