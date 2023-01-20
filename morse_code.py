@@ -1,6 +1,11 @@
 import machine
 import utime
-led = machine.Pin("LED", machine.Pin.OUT)
+from machine import PWM, Pin
+led = machine.Pin(18, machine.Pin.OUT)
+buzzer = PWM(Pin(15))
+buzzer.freq(500)
+volume = 1000
+
 decode = {".-": "A",
           "-...": "B",
           "-.-.": "C",
@@ -67,12 +72,16 @@ def flash_led(morse_code_letter):
     for char in morse_code_letter:
         if char == ".":
             led.on()
+            buzzer.duty_u16(volume)
             utime.sleep(0.2)
             led.off()
+            buzzer.duty_u16(0)
         if char == "-":
             led.on()
+            buzzer.duty_u16(volume)
             utime.sleep(0.6)
             led.off()
+            buzzer.duty_u16(0)
         if char == '/':
             utime.sleep(1)
         
