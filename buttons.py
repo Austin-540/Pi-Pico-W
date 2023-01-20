@@ -1,12 +1,21 @@
-from picozero import Button
-from time import sleep
-print("Hello world")
-
-button = Button(12)
+from machine import Pin
+from utime import sleep_ms
+import utime
+button = Pin(0, Pin.IN, Pin.PULL_UP)   
+led = Pin(16, Pin.OUT)
+State=0                                #0 means that the light is currently off
 
 while True:
-    if button.is_pressed:
-        print("Button is pressed")
-    else:
-        print("Button is not pressed")
-    sleep(0.1)
+    print(button.value())
+    if button.value() == 0:       #key press
+        if State==0: 
+            led.value(1)
+            sleep_ms=100
+            while button.value() == 0:
+               State=1        
+        else:
+            led.value(0)
+            sleep_ms=100
+            while button.value()== 0:
+                State=0
+    utime.sleep(0.05)
