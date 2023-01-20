@@ -1,18 +1,26 @@
 import machine
-import utime
-"""from machine import PWM, Pin
+import math
+from machine import PWM, Pin
+from machine import Pin, PWM
+from utime import sleep
+
 buzzer = PWM(Pin(15))
 buzzer.freq(500)
-volume = 1000
+buzzer.duty_u16(1000)
+
+
+
+
+led2 = machine.Pin(28, machine.Pin.OUT)
+potentiometer = machine.ADC(26)
+
 
 while True:
-    buzzer.duty_u16(volume)"""
+    new_num = math.floor((potentiometer.read_u16()/60)) +50
+    print(new_num)
+    buzzer.freq(new_num)
+    sleep(0.1)
+    
 
-led = machine.Pin(15, machine.Pin.OUT)
-led2 = machine.Pin(28, machine.Pin.OUT)
-
-
-led.on()
-led2.on()
 
 
