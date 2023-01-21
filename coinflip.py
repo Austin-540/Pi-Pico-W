@@ -47,6 +47,7 @@ button2.irq(trigger=button2.IRQ_FALLING, handler=button2_press)
 
 
 while True:
+    flag = False
     pick = ""
     white_led.on()
     buzzer.duty_u16(1000)
@@ -80,15 +81,16 @@ while True:
             green_led.on()
             utime.sleep(0.3)
             all_off()
+            flag = True
             break
     
-    if random.randint(1,2) == 1:
+    if random.randint(1,2) == 1 and flag == False:
         print("Win Score:", score+1)
         score += 1
         green_led.on()
         utime.sleep(0.5)
         green_led.off()
-    else:
+    elif flag == False:
         print("Lose")
         red_led.on()
         utime.sleep(0.5)
