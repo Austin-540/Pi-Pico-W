@@ -16,7 +16,7 @@ I'm trying to use every component that came with my components kit. Here's my pr
 ❌ IC 74HC595  
 ✅ Button (small)  
 ✅ Active Buzzer  
-❌ IR Receiving Head  
+✅ IR Receiving Head  
 ❌ Flame sensor  
 ✅ Precision Potentiometer  
 ❌ 22pf Ceramic Capacitor  
