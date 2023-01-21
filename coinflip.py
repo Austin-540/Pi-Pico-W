@@ -1,8 +1,10 @@
 from machine import Pin, PWM
 import utime
 import random
+import machine
 score = 0
 onboard_led = machine.Pin("LED", machine.Pin.OUT)
+
 
 red_led = machine.Pin(17, machine.Pin.OUT)
 green_led = machine.Pin(16, machine.Pin.OUT)
@@ -67,22 +69,30 @@ while True:
     buzzer.freq (800)
     utime.sleep(0.5)
     
-    utime.sleep(0.7)
-    if pick == "":
-        print("No guess")
+    timer = 0
     
-    elif pick == "1" or pick == "2":
-        if random.randint(1,2) == 1:
-            print("Win Score:", score+1)
-            score += 1
-            green_led.on()
-            utime.sleep(0.5)
-            green_led.off()
-        else:
-            print("Lose")
+    while pick == "":
+        timer += 0.1
+        utime.sleep(0.1)
+        if timer >= 1:
+            print("No guess")
             red_led.on()
-            utime.sleep(0.5)
-            red_led.off()
+            green_led.on()
+            utime.sleep(0.3)
+            all_off()
+            break
+    
+    if random.randint(1,2) == 1:
+        print("Win Score:", score+1)
+        score += 1
+        green_led.on()
+        utime.sleep(0.5)
+        green_led.off()
+    else:
+        print("Lose")
+        red_led.on()
+        utime.sleep(0.5)
+        red_led.off()
     
     for _ in range(score):
         onboard_led.on()
