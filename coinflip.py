@@ -26,7 +26,7 @@ LEDs = [red_led, green_led, white_led]
 def all_off():
     for i in range(len(LEDs)):
         LEDs[i].off()
-    
+
 all_off()
 utime.sleep(2)
 
@@ -47,7 +47,7 @@ button2.irq(trigger=button2.IRQ_FALLING, handler=button2_press)
 
 
 while True:
-    flag = False
+    guess_time_out = False
     pick = ""
     white_led.on()
     buzzer.duty_u16(1000)
@@ -69,9 +69,9 @@ while True:
     buzzer.duty_u16(0)
     buzzer.freq (800)
     utime.sleep(0.5)
-    
+
     timer = 0
-    
+
     while pick == "":
         timer += 0.1
         utime.sleep(0.1)
@@ -81,31 +81,31 @@ while True:
             green_led.on()
             utime.sleep(0.3)
             all_off()
-            flag = True
+            guess_time_out = True
             break
-    
-    if random.randint(1,2) == 1 and flag == False:
+
+    if random.randint(1,2) == 1 and guess_time_out == False:
         print("Win Score:", score+1)
         score += 1
         green_led.on()
         utime.sleep(0.5)
         green_led.off()
-    elif flag == False:
+    elif guess_time_out == False:
         print("Lose")
         red_led.on()
         utime.sleep(0.5)
         red_led.off()
-    
+
     for _ in range(score):
         onboard_led.on()
         utime.sleep(0.2)
         onboard_led.off()
         utime.sleep(0.2)
     utime.sleep(3)
-    
-    
-    
-    
-    
+
+
+
+
+
 
 
