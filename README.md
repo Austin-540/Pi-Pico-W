@@ -7,7 +7,7 @@ I'm trying to use every component that came with my components kit. Here's my pr
 
 
 ✅ LEDs  
-❌ RGB LED  
+✅ RGB LED  
 ❌ Photoresistor  
 ❌ Thermistor  
 ❌ Diode Rectifier (1N4007)  
