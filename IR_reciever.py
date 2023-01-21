@@ -6,7 +6,17 @@ red = machine.Pin(16, machine.Pin.OUT)
 
 codes = {
     "13": "on",
-    "31": "off"
+    "31": "off",
+    "9": "br_up",
+    "29": "br_down",
+    "25": "red",
+    "27": "green",
+    "17": "blue",
+    "21": "white",
+    "77": "flash",
+    "0": "strobe",
+    "26": "fade",
+    "12": "smooth"
     }
 
 def callback(data, addr, ctrl):
