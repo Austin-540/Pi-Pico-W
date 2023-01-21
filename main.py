@@ -1,8 +1,7 @@
 import machine
 from machine import Pin
 import utime
-
-import coinflip
+import IR_reciever
 
 
 button = Pin(0, Pin.IN, Pin.PULL_UP)   
