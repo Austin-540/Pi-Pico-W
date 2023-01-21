@@ -3,7 +3,7 @@
 Some micropython scripts I wrote to run on my Raspberry Pi Pico W
 
 I'm trying to use every component that came with my components kit. Here's my progress:
-✅❌
+
 
 
 ✅ LEDs  
