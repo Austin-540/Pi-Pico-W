@@ -33,8 +33,15 @@ def callback(data, addr, ctrl):
         
         
         if ir_code_label == "on":
+            if state == "white":
                 led_r.on()
                 led_g.on()
+                led_b.on()
+            elif state == "red":
+                led_r.on()
+            elif state == "green":
+                led_g.on()
+            else:
                 led_b.on()
                 
         elif ir_code_label == "off":
@@ -42,21 +49,27 @@ def callback(data, addr, ctrl):
             led_g.off()
             led_b.off()
         elif ir_code_label == "red":
+            state = "red"
             led_r.on()
             led_g.off()
             led_b.off()
         elif ir_code_label == "green":
+            state = "green"
             led_g.on()
             led_r.off()
             led_b.off()
         elif ir_code_label == "blue":
+            state = "blue"
             led_b.on()
             led_r.off()
             led_g.off()
         elif ir_code_label == "white":
+            state = "white"
             led_r.on()
             led_g.on()
             led_b.on()
             
+global state
+state = "white"
 ir = NEC_8(Pin(15, Pin.IN), callback)
 
