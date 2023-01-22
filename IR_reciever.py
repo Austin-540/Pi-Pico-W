@@ -2,7 +2,10 @@ import time
 from machine import Pin
 from ir_rx.nec import NEC_8  # NEC remote, 8 bit addresses
 
-red = machine.Pin(16, machine.Pin.OUT)
+
+led_r = machine.Pin(22, machine.Pin.OUT)
+led_g = machine.Pin(26, machine.Pin.OUT)
+led_b = machine.Pin(27, machine.Pin.OUT)
 
 codes = {
     "13": "on",
@@ -20,6 +23,7 @@ codes = {
     }
 
 def callback(data, addr, ctrl):
+    global state
     if data < 0:  # NEC protocol sends repeat codes.
         print('Repeat code.')
     else:
@@ -27,12 +31,32 @@ def callback(data, addr, ctrl):
         ir_code_label = codes[str(data)]
         print(ir_code_label)
         
+        
         if ir_code_label == "on":
-            red.on()
+                led_r.on()
+                led_g.on()
+                led_b.on()
+                
         elif ir_code_label == "off":
-            red.off()
-        
-        
-
+            led_r.off()
+            led_g.off()
+            led_b.off()
+        elif ir_code_label == "red":
+            led_r.on()
+            led_g.off()
+            led_b.off()
+        elif ir_code_label == "green":
+            led_g.on()
+            led_r.off()
+            led_b.off()
+        elif ir_code_label == "blue":
+            led_b.on()
+            led_r.off()
+            led_g.off()
+        elif ir_code_label == "white":
+            led_r.on()
+            led_g.on()
+            led_b.on()
+            
 ir = NEC_8(Pin(15, Pin.IN), callback)
 
