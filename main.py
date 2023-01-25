@@ -1,8 +1,8 @@
 import machine
 from machine import Pin
 import utime
-import IR_reciever
 
+import lcd
 
 button = Pin(0, Pin.IN, Pin.PULL_UP)   
 
