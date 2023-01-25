@@ -1,4 +1,5 @@
 import utime
+import machine
 
 from machine import I2C, ADC, Timer
 from lcd_api import LcdApi
@@ -19,15 +20,19 @@ def hello_world(temperature):
     lcd.move_to(2,0)
     lcd.putstr("Hello World!")
     lcd.move_to(0,1)
-    lcd.putstr("Its      degrees".format(temperature))
-hello_world("")
+    lcd.putstr("Its      degrees")
 
 
-def update_temp(temperature):
+def update_temp():
+    print("Temp Tick")
+    currentvoltage = tempsensor.read_u16() * conversion_factor
+    temp = 27 - ((currentvoltage - 0.706)/0.001721)
     lcd.move_to(4,1)
-    lcd.putstr("{:.1f}".format(temperature))
+    lcd.putstr("{:.1f}".format(temp))
+    print("Temp: ", temp)
 
 def temp_tick(var):
+    print("Temp Tick")
     currentvoltage = tempsensor.read_u16() * conversion_factor
     temp = 27 - ((currentvoltage - 0.706)/0.001721)
     update_temp(temp)
@@ -37,7 +42,14 @@ Timer().init(freq=1, mode=Timer.PERIODIC, callback=temp_tick)
 #my custom display commands
 #clear screen
 
-temp_tick("")
+hello_world("")
+
+currentvoltage = tempsensor.read_u16() * conversion_factor
+temp = 27 - ((currentvoltage - 0.706)/0.001721)
+update_temp()
+
+    
 while True:
-    pass
-    utime.sleep(5)
+    utime.sleep(4)
+    print("Time.sleep finished")
+    update_temp()
